@@ -42,8 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $success = "Connexion réussie ✅ Bienvenue {$user['prenom']} !";
                 // Redirection après 2 secondes
-                $redirectTo = 'index.php';
-               exit;
+                // Redirection immédiate
+                header('Location: index.php');
+                exit;
             } else {
                 $erreurs[] = "Login ou mot de passe incorrect.";
             }
