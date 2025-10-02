@@ -1,78 +1,113 @@
 <?php
 // profile.php
 session_start();
+require 'bd.php';
 
-// Vérifier si l'utilisateur est connecté
 if (empty($_SESSION['user'])) {
-    header('Location: login.php');
-    exit;
+    header('Location: login.php'); exit;
 }
 
-// Vérifier que c'est bien l'admin
-if ($_SESSION['user']['login'] !== 'admin') {
-    header('Location: index.php');
-    exit;
-}
+$pdo = getPDO();
+$id = (int) $_SESSION['user']['id'];
 
-// Connexion à la base
-$host = 'localhost';
-$db = 'moduleconnexion';
-$user = 'root';
-$pass = '780662aB2';
-$charset = 'utf8mb4';
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
+// Charger les infos actuelles
+$stmt = $pdo->prepare("SELECT id, login, prenom, nom FROM utilisateurs WHERE id = ?");
+$stmt->execute([$id]);
+$user = $stmt->fetch();
+if (!$user) { die("Utilisateur introuvable."); }
 
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+$erreurs = [];
+$ok = false;
 
-    // Récupérer tous les utilisateurs
-    $stmt = $pdo->query("SELECT id, login, prenom, nom, paswword FROM utilisateurs ORDER BY id ASC");
-    $utilisateurs = $stmt->fetchAll();
-} catch (PDOException $e) {
-    die("Erreur de connexion : " . $e->getMessage());
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $login   = trim($_POST['login'] ?? '');
+    $prenom  = trim($_POST['prenom'] ?? '');
+    $nom     = trim($_POST['nom'] ?? '');
+    $passNew = $_POST['password'] ?? ''; // peut être vide
+
+    if ($login === '' || $prenom === '' || $nom === '') {
+        $erreurs[] = "Tous les champs (sauf mot de passe) sont requis.";
+    } else {
+        try {
+            if ($passNew !== '') {
+                $hash = password_hash($passNew, PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare("UPDATE utilisateurs SET login=?, prenom=?, nom=?, password=? WHERE id=?");
+                $stmt->execute([$login, $prenom, $nom, $hash, $id]);
+            } else {
+                $stmt = $pdo->prepare("UPDATE utilisateurs SET login=?, prenom=?, nom=? WHERE id=?");
+                $stmt->execute([$login, $prenom, $nom, $id]);
+            }
+            // Mets à jour la session pour refléter les nouveaux champs
+            $_SESSION['user']['login']  = $login;
+            $_SESSION['user']['prenom'] = $prenom;
+            $_SESSION['user']['nom']    = $nom;
+            $ok = true;
+
+            // Recharge les données pour réafficher le formulaire à jour
+            $stmt = $pdo->prepare("SELECT id, login, prenom, nom FROM utilisateurs WHERE id = ?");
+            $stmt->execute([$id]);
+            $user = $stmt->fetch();
+        } catch (PDOException $e) {
+            $erreurs[] = "Erreur DB : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+        }
+    }
 }
 ?>
 <!doctype html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mon profil</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-    <title>Liste des utilisateurs</title>
 </head>
 <body>
-<div class="container" style="margin-top:30px;">
-    <h1 class="title">Liste des utilisateurs</h1>
+<div class="container" style="margin-top:30px; max-width:700px;">
+    <h1 class="title">Mon profil</h1>
 
-    <table class="table is-fullwidth is-striped is-hoverable">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Login</th>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Mot de passe</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($utilisateurs as $u): ?>
-            <tr>
-                <td><?= htmlspecialchars($u['id']) ?></td>
-                <td><?= htmlspecialchars($u['login']) ?></td>
-                <td><?= htmlspecialchars($u['prenom']) ?></td>
-                <td><?= htmlspecialchars($u['nom']) ?></td>
-                <td><?= htmlspecialchars($u['password']) ?></td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+    <?php if ($ok): ?>
+        <div class="notification is-success">Profil mis à jour ✅</div>
+    <?php endif; ?>
 
-    <p><a class="button is-link" href="index.php">Retour à l'accueil</a></p>
+    <?php if (!empty($erreurs)): ?>
+        <div class="notification is-danger">
+            <?php foreach ($erreurs as $err): ?>
+                <p><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <form method="post" class="box">
+        <div class="field">
+            <label class="label">Login</label>
+            <div class="control">
+                <input class="input" type="text" name="login" value="<?= htmlspecialchars($user['login']) ?>" required>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Prénom</label>
+            <div class="control">
+                <input class="input" type="text" name="prenom" value="<?= htmlspecialchars($user['prenom']) ?>" required>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Nom</label>
+            <div class="control">
+                <input class="input" type="text" name="nom" value="<?= htmlspecialchars($user['nom']) ?>" required>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Nouveau mot de passe</label>
+            <div class="control">
+                <input class="input" type="password" name="password" placeholder="Laisser vide pour ne pas changer">
+            </div>
+        </div>
+
+        <button class="button is-success" type="submit">Enregistrer</button>
+        <a class="button is-light" href="index.php">Retour</a>
+    </form>
 </div>
 </body>
 </html>
