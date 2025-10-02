@@ -35,10 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <title>Inscription</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="style/inscription.css">
 </head>
 <body>
-<section class="section">
-    <div class="container">
+<section class="container">
+    <div >
         <h1 class="title">Inscription</h1>
 
         <?php if ($erreurs): ?>

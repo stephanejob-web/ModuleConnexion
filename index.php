@@ -56,7 +56,7 @@ $isAdmin = isset($user['login']) && $user['login'] === 'admin';
 <!-- NAVBAR (Bulma pur) -->
 <nav class="navbar is-spaced is-dark" role="navigation" aria-label="navigation principale">
     <div class="navbar-brand">
-        <a class="navbar-item" href="index.php"><strong>Mon Site Bulma</strong></a>
+        <a class="navbar-item" href="index.php"><strong>Mon Site stephane</strong></a>
 
         <!-- Burger -->
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMain">
@@ -85,7 +85,7 @@ $isAdmin = isset($user['login']) && $user['login'] === 'admin';
 </nav>
 
 <!-- HERO Parallax -->
-<section class="hero is-fullheight parallax" style="background-image:url('https://images.unsplash.com/photo-1517249361621-f11084eb8e28?q=80&w=1920&auto=format&fit=crop');">
+<section class="hero is-fullheight parallax" style="background-image:url('https://images.unsplash.com/photo-1599507593499-a3f7d7d97667?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
     <div class="hero-body">
         <div class="container">
             <?php if ($isAdmin): ?>
@@ -98,10 +98,10 @@ $isAdmin = isset($user['login']) && $user['login'] === 'admin';
                 </div>
             <?php endif; ?>
 
-            <h1 class="title is-1 has-text-white">Hello Bulma Parallax</h1>
+            <h1 class="title is-1 has-text-white">Hello  <?= htmlspecialchars($user['prenom'] ?? $user['login'], ENT_QUOTES, 'UTF-8') ?></h1>
             <div class="section-divider"></div>
             <h2 class="subtitle has-text-white-bis">
-                Un template élégant 100% Bulma, sans dépendances d’icônes.
+               BIENVENUE SUR MON SITE WEB APPRENTISSAGE PHP
             </h2>
             <div class="buttons">
                 <a href="#about" class="button is-link is-medium">En savoir plus</a>
@@ -114,44 +114,44 @@ $isAdmin = isset($user['login']) && $user['login'] === 'admin';
 <!-- À PROPOS -->
 <section id="about" class="section">
     <div class="container">
-        <h2 class="title is-2">À propos</h2>
+        <h2 class="title is-2">À propos de mon apprentissage PHP</h2>
         <div class="section-divider"></div>
         <div class="columns is-vcentered">
             <div class="column is-6">
                 <p class="is-size-5">
-                    Nous créons des interfaces web rapides, accessibles et soignées.
-                    Ce modèle Bulma met l’accent sur la clarté, la lisibilité et un layout moderne.
+                    J’apprends à développer en PHP pour créer des applications dynamiques et interactives.
+                    Ce langage me permet de gérer la logique serveur, les formulaires, et les bases de données.
                 </p>
                 <div class="columns mt-5">
                     <div class="column">
                         <div class="box card-elevate">
-                            <h3 class="title is-5">Rapide</h3>
-                            <p>Code épuré, design léger, chargements rapides.</p>
+                            <h3 class="title is-5">Syntaxe simple</h3>
+                            <p>Un langage facile à lire, proche du C et du JavaScript.</p>
                         </div>
                     </div>
                     <div class="column">
                         <div class="box card-elevate">
-                            <h3 class="title is-5">Responsive</h3>
-                            <p>Grille Bulma, mobile-first, adaptatif sur tous écrans.</p>
+                            <h3 class="title is-5">Connexion BDD</h3>
+                            <p>Intégration avec MySQL, PDO et gestion des données.</p>
                         </div>
                     </div>
                     <div class="column">
                         <div class="box card-elevate">
-                            <h3 class="title is-5">Accessible</h3>
-                            <p>Contrastes lisibles, sémantique propre, ARIA de base.</p>
+                            <h3 class="title is-5">Web dynamique</h3>
+                            <p>Permet de générer du HTML dynamique et d’interagir avec l’utilisateur.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="column is-6">
                 <div class="box card-elevate">
-                    <h3 class="title is-5">Points forts</h3>
+                    <h3 class="title is-5">Points forts de PHP</h3>
                     <ul class="content">
-                        <li>Navbar responsive (burger)</li>
-                        <li>Hero pleine hauteur en parallax</li>
-                        <li>Sections “À propos”, “Services”, “Contact”</li>
-                        <li>Bloc Admin conditionnel</li>
-                        <li>Footer stylé</li>
+                        <li>Facile à apprendre et à utiliser</li>
+                        <li>Très utilisé dans le web (WordPress, Laravel...)</li>
+                        <li>Compatible avec la plupart des serveurs</li>
+                        <li>Grande communauté et documentation riche</li>
+                        <li>Idéal pour les projets web dynamiques</li>
                     </ul>
                 </div>
             </div>
@@ -159,33 +159,35 @@ $isAdmin = isset($user['login']) && $user['login'] === 'admin';
     </div>
 </section>
 
+
 <!-- SERVICES (Parallax 2) -->
-<section id="services" class="section parallax" style="background-image:url('https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=1920&auto=format&fit=crop');">
+<section id="services" class="section parallax" style="background-image:url('https://media.istockphoto.com/id/873075750/fr/photo/code-de-programmation-informatique.webp?s=2048x2048&w=is&k=20&c=o9x84B8X1y6wddmgevwy6c08GVPNs9SpIqDq-XfdY7o=');">
     <div class="container">
-        <h2 class="title is-2 has-text-white">Services</h2>
+        <h2 class="title is-2 has-text-white">PHP – Ce que j’apprends</h2>
         <div class="section-divider"></div>
         <div class="columns">
             <div class="column">
                 <div class="box card-elevate">
-                    <h3 class="title is-5">Conseil</h3>
-                    <p>Accompagnement sur mesure, audit et recommandations.</p>
+                    <h3 class="title is-5">Bases du langage</h3>
+                    <p>Variables, conditions, boucles, fonctions : comprendre la syntaxe PHP.</p>
                 </div>
             </div>
             <div class="column">
                 <div class="box card-elevate">
-                    <h3 class="title is-5">Développement</h3>
-                    <p>Applications web performantes, sécurité, bonnes pratiques.</p>
+                    <h3 class="title is-5">Formulaires & Sessions</h3>
+                    <p>Traitement des formulaires HTML, gestion des sessions et cookies.</p>
                 </div>
             </div>
             <div class="column">
                 <div class="box card-elevate">
-                    <h3 class="title is-5">Design</h3>
-                    <p>UI/UX soignée, cohérence visuelle et expérience fluide.</p>
+                    <h3 class="title is-5">Bases de données</h3>
+                    <p>Connexion avec MySQL via PDO, requêtes SQL et sécurité des données.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 
 <!-- CONTACT -->
 <section id="contact" class="section">
@@ -198,13 +200,17 @@ $isAdmin = isset($user['login']) && $user['login'] === 'admin';
                     <div class="field">
                         <label class="label">Nom</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="Votre nom">
+                            <label>
+                                <input class="input" type="text" placeholder="Votre nom">
+                            </label>
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Email</label>
                         <div class="control">
-                            <input class="input" type="email" placeholder="vous@exemple.com">
+                            <label>
+                                <input class="input" type="email" placeholder="vous@exemple.com">
+                            </label>
                         </div>
                     </div>
                     <div class="field">
